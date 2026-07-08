@@ -44,6 +44,25 @@
                 </div>
             </div>
         </div>
+        <div class="garden-card"> <!-- Première boite conteneur : C'est la fenêtre de perspective. Elle reste immobile. -->
+            <div class="card-inner"> <!-- Le mouvement de rotation à 180° (transform: rotateY) au survol et la liaison 3D entre le recto et le verso (transform-style: preserve-3d).Son rôle : C'est le moteur de l'animation. C'est cette boîte unique qui tourne sur elle-même. -->
+                <div class="card-front"> <!-- 'affichage initial de la carte. Elle gère son empilement absolu pour se superposer au verso et la propriété backface-visibility: hidden; (pour devenir invisible quand elle passe derrière). -->
+                    <article class="card-content">
+                        <h2 class="garden-name">Nom du Jardin</h2>
+                        <p class="card-info"> Nom de l'Asso</p>
+                        <p class="card-info">Adresse du Jardin</p>
+                        <p class="card-info">Arrondissement</p>
+                    </article>
+                </div>
+                <div class="card-back"> <!--Affichage après retournement. Elle est déjà retournée de base à 180° en CSS (transform: rotateY(180deg)) pour qu'on la voie à l'endroit une fois que card-inner aura pivoté. Elle cache aussi sa face quand elle passe derrière. -->
+                    <article class="card-content"> <!-- gère : L'alignement et la disposition du texte (souvent avec Flexbox ou Grid), les marges internes (padding), et la sécurité du design.Son rôle : Isoler le texte et les titres des contraintes de la 3D pour qu'ils soient parfaitement centrés et lisibles. -->
+                        <h2 class="garden-name"> Nom du Jardin</h2>
+                        <p class="card-info"> Adresse mail de l'Asso</p>
+                        <p class="card-info">Site web de l'Asso</p>
+                    </article>
+                </div>
+            </div>
+        </div>
     </main>
     
     
