@@ -1,52 +1,108 @@
-* {
+/* --- Base et Réinitialisation --- */
+body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    padding-bottom: 5px;
-    min-height: 100vh;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-}
-
-header {
-    border-bottom: 1px solid #d2b48c;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #97ca77;
-}
-
-.logo img {
-    width: 50px;
-    height: auto;
-}
-h1 {
-    margin : 20px; 
+    font-family: Arial, sans-serif;
+    background-color: #e9ecef; /* Couleur de fond globale */
+    color: #333;
 }
 
 .main {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 30px;
-    padding: 40px;
-}
-/*-------------------*/
-/*PAGE 2 : LES CARTES*/
-/*-------------------*/
-
-.garden-card{
+    max-width: 1200px;
     margin: 0 auto;
-    width : 280px;
-    height: 380px;
-    perspective: 1000px;
-    text-align: center;
-    cursor: pointer;
+    padding: 0 20px 40px 20px;
 }
 
+/* --- En-tête (.header) --- */
+.header {
+    background-color: #b2e4a4; /* Le vert de la maquette */
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 30px;
+    margin: 20px auto 30px auto;
+    max-width: 1140px;
+    border-radius: 4px;
+}
+
+.logo img {
+    height: 45px; /* Aligne la taille de l'icône de l'arroseur */
+    display: block;
+}
+
+.title {
+    font-size: 1.25rem;
+    margin: 0;
+    color: #2c3e29;
+    font-weight: 600;
+}
+
+/* --- Section Recherche et Filtres (.search-section) --- */
+.search-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 35px;
+    padding: 0 5px;
+}
+
+.search, .filter {
+    position: relative;
+    display: inline-block;
+}
+
+.search .input, .filter .input {
+    width: 250px;
+    padding: 8px 35px 8px 12px;
+    border: 1.5px solid #7a8a9e;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* Le bouton loupe dans la barre de recherche */
+.search-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.search-button::before {
+    content: "🔍";
+}
+
+.results-count {
+    font-size: 0.9rem;
+    color: #444;
+    font-weight: bold;
+    margin-left: auto; /* Aligne le compteur tout à droite */
+}
+
+/* --- Grille de cartes (.card-section) --- */
+.card-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    padding: 10px 5px;
+}
+
+/* --- Effet Flipside 3D (Tes boîtes de structure) --- */
+
+/* 1. Fenêtre de perspective (Reste immobile) */
+.garden-card {
+    background-color: transparent;
+    height: 340px;
+    perspective: 1000px; 
+}
+
+/* 2. Le moteur de l'animation (La boîte unique qui tourne) */
 .card-inner {
     position: relative;
     width: 100%;
@@ -55,62 +111,57 @@ h1 {
     transform-style: preserve-3d;
 }
 
-.card-inner.is-flipped {
-    transform: rotateY(180deg); /* retourne la carte de 180° sur l'axe Y donc horizontalement*/
-}
-
-
-.card-front, .card-back {
-    position: absolute; 
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-}
-
-.card-back{
+/* Déclencheur du retournement au survol (ou via une classe .flipped en JS) */
+.garden-card:hover .card-inner,
+.garden-card.flipped .card-inner {
     transform: rotateY(180deg);
 }
-.card-content {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 15px;
-    padding: 15px;
-    border: 1px solid;
-    border-radius: 10px;
-    text-align: center;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
+/* 3. Faces commune Recto et Verso */
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    background-color: #f3ebac; /* Le jaune pastel de ta maquette */
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    box-sizing: border-box;
 }
 
+/* Positionnement spécifique du Verso de base */
+.card-back {
+    transform: rotateY(180deg);
+}
 
-/* Fonctionnement d'une flip-card 
+.card-section {
+    display: flex;
+    flex-wrap: wrap;       /* Permet aux cartes de passer à la ligne suivante */
+    justify-content: flex-start; /* Aligne les cartes à gauche (ou 'center' si tu préfères) */
+    gap: 30px;             /* Gère l'espace régulier entre tes blocs */
+    padding: 10px 5px;
+}
 
-➔ garden-card (Le capot / Le studio 3D)
-- perspective: 1000px; : La plus importante. C'est elle qui crée l'effet de profondeur. Plus le chiffre est petit, plus l'effet 3D est exagéré.
-- width et height : On définit la taille fixe de la carte ici.
+/* --- Taille fixée pour tes cartes --- */
+.garden-card {
+    background-color: transparent;
+    height: 280px;               /* Réduit la hauteur (anciennement 340px) */
+    width: calc(33.333% - 20px); /* Garde 3 cartes par ligne */
+    min-width: 250px;            /* Réduit la largeur minimale pour qu'elles soient plus fines */
+    perspective: 1000px; 
+}
 
-
-➔ contient card-inner (Le moteur / La toupie)
-- transform-style: preserve-3d; : Ordonne aux enfants (card-front et card-back) de rester dans l'espace 3D au lieu d'être écrasés à plat.
-
-- transition: transform 0.6s; : Permet à la rotation d'être fluide (et de ne pas passer du recto au verso instantanément en un flash).
-
-- transform: rotateY(180deg); : (Souvent déclenché au :hover) C'est l'action qui fait tourner ce bloc à 180 degrés sur l'axe vertical.
-
-
-➔ contient card-front (La face avant)
-- position: absolute; : Permet de superposer le recto et le verso l'un sur l'autre, comme deux cartes collées.
-
-- backface-visibility: hidden; : Indispensable. Elle dit au navigateur : "Si cette face se retrouve cachée derrière à cause de la rotation, rends-la invisible". Sans ça, les écritures du verso se verraient à l'envers à travers le recto.
-➔ contient card-content (Le texte du recto)
--  Organise le texte : display : flex , padding , height : 100%
-
-
-➔ contient card-back (La face arrière)
--  transform: rotateY(180deg); : On la retourne par défaut dans le CSS pour qu'elle soit déjà sur l'envers au départ.
-➔ contient card-content (Le texte du verso)
--  Organise le texte : display : flex , padding , height : 100%
-*/
+/* --- Centrage parfait du texte à l'intérieur --- */
+.card-content {
+    padding: 20px;
+    height: 100%;
+    box-sizing: border-box;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* Centre le texte verticalement */
+    align-items: center;       /* Centre le texte horizontalement */
+    text-align: center;        /* Aligne les lignes de texte au milieu */
+    gap: 10px;                 /* Espace régulier entre chaque ligne de texte */
+}

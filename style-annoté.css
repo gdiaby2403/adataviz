@@ -1,0 +1,143 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    padding-bottom: 5px;
+    min-height: 100vh;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+header {
+    border-bottom: 1px solid #d2b48c;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #97ca77;
+}
+
+.logo img {
+    width: 60px;
+    height: auto;
+}
+h1 {
+    margin : 20px; 
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 40px;
+    width: 100%;
+    max-width: 1400px;
+    border: 3px solid black;
+    align-items: center; 
+}
+
+.search-section {
+    display: flex;
+    gap: 20px; /* Espace entre la barre de recherche et le filtre */
+    justify-content: flex-start;
+    width: 100%;
+    border: 3px solid rgb(37, 173, 35);
+}
+.card-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+    border: 3px solid rgb(91, 25, 76);
+
+}
+
+/*-------------------*/
+/*PAGE 2 : LES CARTES*/
+/*-------------------*/
+
+.garden-card{
+    width : 200px;
+    height: 230px;
+    perspective: 1000px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.card-inner.is-flipped {
+    transform: rotateY(180deg); /* retourne la carte de 180° sur l'axe Y donc horizontalement*/
+}
+
+
+.card-front, .card-back {
+    position: absolute; 
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    
+}
+
+.card-back{
+    transform: rotateY(180deg);
+}
+.card-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    padding: 15px;
+    border: 1px solid;
+    border-radius: 10px;
+    text-align: center;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-info {
+    font-size: 0.75rem;      /* Taille "légende", très compacte */
+    line-height: 1.2;
+    color: #666;
+    margin: 2px 0;
+}
+
+
+/* Fonctionnement d'une flip-card 
+
+➔ garden-card (Le capot / Le studio 3D)
+- perspective: 1000px; : La plus importante. C'est elle qui crée l'effet de profondeur. Plus le chiffre est petit, plus l'effet 3D est exagéré.
+- width et height : On définit la taille fixe de la carte ici.
+
+
+➔ contient card-inner (Le moteur / La toupie)
+- transform-style: preserve-3d; : Ordonne aux enfants (card-front et card-back) de rester dans l'espace 3D au lieu d'être écrasés à plat.
+
+- transition: transform 0.6s; : Permet à la rotation d'être fluide (et de ne pas passer du recto au verso instantanément en un flash).
+
+- transform: rotateY(180deg); : (Souvent déclenché au :hover) C'est l'action qui fait tourner ce bloc à 180 degrés sur l'axe vertical.
+
+
+➔ contient card-front (La face avant)
+- position: absolute; : Permet de superposer le recto et le verso l'un sur l'autre, comme deux cartes collées.
+
+- backface-visibility: hidden; : Indispensable. Elle dit au navigateur : "Si cette face se retrouve cachée derrière à cause de la rotation, rends-la invisible". Sans ça, les écritures du verso se verraient à l'envers à travers le recto.
+➔ contient card-content (Le texte du recto)
+-  Organise le texte : display : flex , padding , height : 100%
+
+
+➔ contient card-back (La face arrière)
+-  transform: rotateY(180deg); : On la retourne par défaut dans le CSS pour qu'elle soit déjà sur l'envers au départ.
+➔ contient card-content (Le texte du verso)
+-  Organise le texte : display : flex , padding , height : 100%
+*/
