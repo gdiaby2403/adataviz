@@ -1,6 +1,6 @@
 import { formatData } from "./utils.js"
 
-//stocke les 20 jardins réutilisable hors de la fonction async
+// stocke les 20 jardins réutilisable hors de la fonction async
 let allGarden = [] 
 const selectArrondissement = document.querySelector("#arrondissement-select")
 
@@ -9,10 +9,12 @@ async function getData() {
         const response = await fetch("https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/jardins-partages/records?limit=20")
         const data = await response.json()
 
-        const gardenCard = formatData(data)
-        allGarden = gardenCard
+        const formatedData = formatData(data)
+        allGarden = formatedData
 
-        displayCards(gardenCard)
+        displayCards(formatedData)
+
+        arrFilter(formatedData)
 
 
     } catch (error) {
@@ -33,13 +35,13 @@ function displayCards(gardenArray) {
 
     gardenArray.forEach((garden) => {
 
-        // boîte exterieure
+        // boîte exterieure conteneur
         const card = document.createElement('div')
         card.classList.add('garden-card')
 
         card.addEventListener('click', () => {
-        card.classList.toggle('flipped'); 
-    });
+            card.classList.toggle('flipped'); 
+        });
         // moteur rotatif (card-inner)
         const cardInner = document.createElement('div')
         cardInner.classList.add('card-inner')
@@ -127,3 +129,27 @@ selectArrondissement.addEventListener("change", () => {
     gardenFilter()
 })
 
+function arrFilter(formatedData) {
+    const arrondissements = []
+    console.log(formatedData)
+    const arrSelect = document.querySelector("#arrondissement-select")
+
+    formatedData.forEach(garden => {
+        if (!arrondissements.includes(garden.arrondissement)) {
+            arrondissements.push(garden.arrondissement)
+        }
+    })
+    arrondissements.forEach((arr) => {
+        const option = document.createElement("option")
+        option.value = arr
+        option.textContent = arr
+        arrSelect.appendChild(option)
+    })
+}
+
+// trier les arrondissements 
+// 1. split mes arrondissements avec espace
+// 2. cibler le 2eme éléments du tableau par ex : 13e, 18e, ...
+// 3. nettoyer le e de 13e 
+// 4. convertir en number 
+// 5. sort a - b 

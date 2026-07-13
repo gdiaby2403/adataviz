@@ -16,3 +16,5 @@ export const formatData = (dataResponse) => {
         return dataArray
 }
 
+
+/* Fonction pure: n'a pas besoin des variables contenues dans main.js, juste besoin des */
