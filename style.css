@@ -78,6 +78,7 @@ body {
     background-color: transparent;
     height: 340px;
     perspective: 1000px; 
+    cursor: pointer;
 }
 
 /* moteur de l'animation (La boîte qui tourne) */
