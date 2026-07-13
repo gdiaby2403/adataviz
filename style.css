@@ -70,7 +70,21 @@ body {
     margin-left: auto; 
 }
 
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 40px;
+    font-size: 0.85rem;
+    color: #666;
+    border-top: 1px solid #d1d5db;
+    background-color: #2c3e29;
+}
 
+footer a {
+    color: #e9ecef;
+    text-decoration: none;
+    font-weight: bold;
+}
 /* Animation flip card */
 
 /* Boîte exterieur (Reste immobile) */
@@ -81,6 +95,10 @@ body {
     cursor: pointer;
 }
 
+.garden-card:hover {
+    transform: translateY(-5px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+} 
 /* moteur de l'animation (La boîte qui tourne) */
 .card-inner {
     position: relative;
