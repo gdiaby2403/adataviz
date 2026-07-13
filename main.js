@@ -1,13 +1,19 @@
-import { formaterDonnee } from "./utils"
+import { formatData } from "./utils.js"
+
+//stocke les 20 jardins réutilisable hors de la fonction async
+let allGarden = [] 
+const selectArrondissement = document.querySelector("#arrondissement-select")
 
 async function getData() {
     try {
         const response = await fetch("https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/jardins-partages/records?limit=20")
-        console.log(response)
-
         const data = await response.json()
-        console.log(data)
-        const gardenCard = formaterDonnee(data)
+
+        const gardenCard = formatData(data)
+        allGarden = gardenCard
+
+        displayCards(gardenCard)
+
 
     } catch (error) {
         console.error(error.message)
@@ -17,77 +23,107 @@ getData()
 
 
 function displayCards(gardenArray) {
-    const container = document.querySelector('.card-section');
-    container.innerHTML = ""; // On vide pour la boucle
+
+      // Compteur résultat trouvé
+    const counterResults = document.querySelector(".results-count")
+    counterResults.textContent = `${gardenArray.length} résultats trouvés` 
+
+    const container = document.querySelector('.card-section')
+    container.innerHTML = "" // On vide pour la boucle
 
     gardenArray.forEach((garden) => {
-        // 1. On crée la grosse boîte de la carte
-        const card = document.createElement('div');
-        card.classList.add('garden-card');
 
-        // 2. On crée le moteur rotatif (card-inner)
-        const cardInner = document.createElement('div');
-        cardInner.classList.add('card-inner');
+        // boîte exterieure
+        const card = document.createElement('div')
+        card.classList.add('garden-card')
 
-        // 3. On crée le RECTO (card-front) et son contenu
-        const cardFront = document.createElement('div');
-        cardFront.classList.add('card-front');
-        const frontArticle = document.createElement('article');
-        frontArticle.classList.add('card-content');
-
-        const titleFront = document.createElement('h2');
-        titleFront.classList.add('garden-name');
-        titleFront.textContent = garden.gardenName;
-
-        const infoOrg = document.createElement('p');
-        infoOrg.classList.add('card-info');
-        infoOrg.textContent = garden.orgName;
-
-        const infoAddress = document.createElement('p');
-        infoAddress.classList.add('card-info');
-        infoAddress.textContent = garden.adress;
-
-        const infoZip = document.createElement('p');
-        infoZip.classList.add('card-info');
-        infoZip.textContent = `Paris ${garden.arrondissement}`;
-
-        // On emboîte le RECTO
-        frontArticle.appendChild(titleFront);
-        frontArticle.appendChild(infoOrg);
-        frontArticle.appendChild(infoAddress);
-        frontArticle.appendChild(infoZip);
-        cardFront.appendChild(frontArticle);
-
-        // 4. On crée le VERSO (card-back) et son contenu
-        const cardBack = document.createElement('div');
-        cardBack.classList.add('card-back');
-        const backArticle = document.createElement('article');
-        backArticle.classList.add('card-content');
-
-        const titleBack = document.createElement('h2');
-        titleBack.classList.add('garden-name');
-        titleBack.textContent = garden.gardenName;
-
-        const infoEmail = document.createElement('p');
-        infoEmail.classList.add('card-info');
-        infoEmail.textContent = garden.email;
-
-        const infoWeb = document.createElement('p');
-        infoWeb.classList.add('card-info');
-        infoWeb.textContent = garden.internet  ;
-
-        // On emboîte le VERSO
-        backArticle.appendChild(titleBack);
-        backArticle.appendChild(infoEmail);
-        backArticle.appendChild(infoWeb);
-        cardBack.appendChild(backArticle);
-
-        // 5. On assemble le tout dans le moteur rotatif
-        cardInner.appendChild(cardFront);
-        cardInner.appendChild(cardBack);
-        card.appendChild(cardInner);
-
-        // 6. On pose la carte finale dans la page
-        container.appendChild(card);
+        card.addEventListener('click', () => {
+        card.classList.toggle('flipped'); 
     });
+        // moteur rotatif (card-inner)
+        const cardInner = document.createElement('div')
+        cardInner.classList.add('card-inner')
+
+        // Recto de la carte (card-front) et son contenu (card-content)
+        const cardFront = document.createElement('div')
+        cardFront.classList.add('card-front')
+        const frontArticle = document.createElement('article')
+        frontArticle.classList.add('card-content')
+
+        // titre de la carte : Nom jardin
+        const titleFront = document.createElement('h2')
+        titleFront.classList.add('garden-name')
+        titleFront.textContent = garden.gardenName
+
+        // Nom Asso
+        const infoOrg = document.createElement('p')
+        infoOrg.classList.add('card-info')
+        infoOrg.textContent = garden.orgName
+
+        const infoAddress = document.createElement('p')
+        infoAddress.classList.add('card-info')
+        infoAddress.textContent = garden.adress
+
+        // Arrondissement
+        const infoArr = document.createElement('p')
+        infoArr.classList.add('card-info')
+        infoArr.textContent = `${garden.arrondissement}`
+
+        // Infos RECTO injectées dans le DOM
+        frontArticle.appendChild(titleFront)
+        frontArticle.appendChild(infoOrg)
+        frontArticle.appendChild(infoAddress)
+        frontArticle.appendChild(infoArr)
+        cardFront.appendChild(frontArticle)
+
+        // Verso de la carte (card-back) et son contenu (card-content)
+        const cardBack = document.createElement('div')
+        cardBack.classList.add('card-back')
+        const backArticle = document.createElement('article')
+        backArticle.classList.add('card-content')
+
+        const titleBack = document.createElement('h2')
+        titleBack.classList.add('garden-name')
+        titleBack.textContent = garden.gardenName
+
+        const infoEmail = document.createElement('p')
+        infoEmail.classList.add('card-info')
+        infoEmail.textContent = garden.email
+
+        const infoWeb = document.createElement('p')
+        infoWeb.classList.add('card-info')
+        infoWeb.textContent = garden.internet  
+
+        //  Infos VERSO injectées dans le DOM
+        backArticle.appendChild(titleBack)
+        backArticle.appendChild(infoEmail)
+        backArticle.appendChild(infoWeb)
+        cardBack.appendChild(backArticle)
+
+        //  Assemblage des boîtes interieurs
+        cardInner.appendChild(cardFront)
+        cardInner.appendChild(cardBack)
+        card.appendChild(cardInner)
+
+        // conteneur principale externe
+        container.appendChild(card)
+
+    })
 }
+
+function gardenFilter() {
+    const selectedValue = selectArrondissement.value;
+
+    const filterResult = allGarden.filter(garden => {
+        // Aucun filtre appliqué on affiche tous les jardins
+        if (selectedValue === "") return true
+        return garden.arrondissement === selectedValue
+        // Affiche seulement les jardins de l'arrondissement sélectionnés
+    })
+    displayCards(filterResult)
+}
+
+selectArrondissement.addEventListener("change", () => {
+    gardenFilter()
+})
+

@@ -1,9 +1,8 @@
 
-
-export const formaterDonnee = (dataResponse) => {
+export const formatData = (dataResponse) => {
     let dataArray = []
     const datagarden = dataResponse.results
-        datagarden.forEach((garden, index) => {
+        datagarden.forEach((garden) => {
             let gardenInfo = {
                 gardenName : garden.nom_ev ,
                 orgName : garden.nom_gerant ,
