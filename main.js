@@ -4,12 +4,16 @@ import { formatData } from "./utils.js"
 let allGarden = [] 
 const selectArrondissement = document.querySelector("#arrondissement-select")
 
+const container = document.querySelector('.card-section')
+container.innerHTML = "" // On vide pour la boucle
+
 async function getData() {
     try {
         const response = await fetch("https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/jardins-partages/records?limit=20")
         const data = await response.json()
 
         const formatedData = formatData(data)
+        console.log(formatData)
         allGarden = formatedData
 
         displayCards(formatedData)
@@ -19,6 +23,7 @@ async function getData() {
 
     } catch (error) {
         console.error(error.message)
+        errorMessage()
     }
 }
 getData()
@@ -30,11 +35,7 @@ function displayCards(gardenArray) {
     const counterResults = document.querySelector(".results-count")
     counterResults.textContent = `${gardenArray.length} résultats trouvés` 
 
-    const container = document.querySelector('.card-section')
-    container.innerHTML = "" // On vide pour la boucle
-
     gardenArray.forEach((garden) => {
-
         // boîte exterieure conteneur
         const card = document.createElement('div')
         card.classList.add('garden-card')
@@ -42,6 +43,7 @@ function displayCards(gardenArray) {
         card.addEventListener('click', () => {
             card.classList.toggle('flipped'); 
         });
+
         // moteur rotatif (card-inner)
         const cardInner = document.createElement('div')
         cardInner.classList.add('card-inner')
@@ -55,21 +57,21 @@ function displayCards(gardenArray) {
         // titre de la carte : Nom jardin
         const titleFront = document.createElement('h2')
         titleFront.classList.add('garden-name')
-        titleFront.textContent = garden.gardenName
+        titleFront.textContent = garden.gardenName || "Nom à venir"
 
         // Nom Asso
         const infoOrg = document.createElement('p')
         infoOrg.classList.add('card-info')
-        infoOrg.textContent = garden.orgName
+        infoOrg.textContent = garden.orgName || "Association à venir"
 
         const infoAddress = document.createElement('p')
         infoAddress.classList.add('card-info')
-        infoAddress.textContent = garden.adress
+        infoAddress.textContent = garden.adress || "adresse à vebir"
 
         // Arrondissement
         const infoArr = document.createElement('p')
         infoArr.classList.add('card-info')
-        infoArr.textContent = `${garden.arrondissement}`
+        infoArr.textContent = `${garden.arrondissement}` || "Arrondissement à venir"
 
         // Infos RECTO injectées dans le DOM
         frontArticle.appendChild(titleFront)
@@ -86,15 +88,15 @@ function displayCards(gardenArray) {
 
         const titleBack = document.createElement('h2')
         titleBack.classList.add('garden-name')
-        titleBack.textContent = garden.gardenName
+        titleBack.textContent = garden.gardenName || "Nom à venir" 
 
         const infoEmail = document.createElement('p')
         infoEmail.classList.add('card-info')
-        infoEmail.textContent = garden.email
+        infoEmail.textContent = garden.email || "Email à venir"
 
         const infoWeb = document.createElement('p')
         infoWeb.classList.add('card-info')
-        infoWeb.textContent = garden.internet  
+        infoWeb.textContent = garden.internet || "Site internet à venir"
 
         //  Infos VERSO injectées dans le DOM
         backArticle.appendChild(titleBack)
@@ -113,6 +115,7 @@ function displayCards(gardenArray) {
     })
 }
 
+
 function gardenFilter() {
     const selectedValue = selectArrondissement.value;
 
@@ -129,9 +132,10 @@ selectArrondissement.addEventListener("change", () => {
     gardenFilter()
 })
 
+
 function arrFilter(formatedData) {
     const arrondissements = []
-    console.log(formatedData)
+    //console.log(formatedData)
     const arrSelect = document.querySelector("#arrondissement-select")
 
     formatedData.forEach(garden => {
@@ -153,3 +157,13 @@ function arrFilter(formatedData) {
 // 3. nettoyer le e de 13e 
 // 4. convertir en number 
 // 5. sort a - b 
+
+
+
+function errorMessage(){
+    const messageSection = document.querySelector(".card-section")
+    const errorMessage = document.createElement('p')
+    errorMessage.classList.add("error-message")
+    errorMessage.textContent = "Une erreur s'est produite"
+    messageSection.appendChild(errorMessage)
+}

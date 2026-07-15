@@ -17,4 +17,5 @@ export const formatData = (dataResponse) => {
 }
 
 
-/* Fonction pure: n'a pas besoin des variables contenues dans main.js, juste besoin des */
+/* Fonction pure: n'a pas besoin des variables contenues dans main.js, juste besoin des variables internes à la fonction 
+facilement testable et réutilisable dans n'importe quel projet */

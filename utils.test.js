@@ -1,5 +1,6 @@
 import {describe, it, expect} from 'vitest'
-import { formatData} from "./utils.js";
+import {formatData} from "./utils.js";
+
 
 
 describe("formatData", () => {
